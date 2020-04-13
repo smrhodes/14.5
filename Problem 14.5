@@ -1,0 +1,45 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.array([10, 20, 30, 40, 50, 60, 70, 80])
+y = np.array([25, 70, 380, 550, 610, 1220, 830, 1450])
+def linregr(x,y):
+  """
+  linregr: linear regression curve fitting
+  [a1, a0, r2] = linregr(x,y): least squares fit of straight
+                 line to data by solving the normal equations
+  Inputs (array of): 
+    x = independent variable
+    y = dependent variable
+  Outputs:
+    a1 = slope
+    a0 = intercept
+    r2 = coefficient of determination
+  """
+  n = np.size(x)
+  if np.size(y) != n:
+    print('x and y must be same length')
+  sx = np.sum(x) 
+  sy = np.sum(y)
+  sx2 = np.sum(x**2)
+  sxy = np.sum(x*y)
+  sy2 = np.sum(y**2)
+  a1 = (n*sxy - sx*sy)/(n*sx2 - sx**2)
+  a0 = (sy/n)-a1*(sx/n)
+  r2 = ((n*sxy - sx*sy)/np.sqrt(n*sx2 - sx**2)/np.sqrt(n*sy2 - sy**2))**2
+  return a1, a0, r2
+  
+[a1, a0, r2] = linregr(x,y)
+xp = np.linspace(np.min(x), np.max(x),2)
+yp = a1*xp + a0
+
+plt.figure()
+plt.plot(x, y, 'o', xp, yp, '-')
+plt.title("Example 14.4: Linear Least Squares Regression")
+plt.text(10, 1200, r'$a_0 = {}$'.format(np.around(a0, decimals = 5)))
+plt.text(10, 1000, r'$a_1 = {}$'.format(np.around(a1, decimals = 5)))
+plt.text(10, 800, r'$r^2 = {}$'.format(np.around(r2, decimals = 3)))
+plt.xlabel('x')
+plt.ylabel('y')
+plt.tight_layout()
+plt.savefig('Problem_14.5', dpi=150)
